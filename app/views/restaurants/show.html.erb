@@ -2,14 +2,11 @@
 <p><%= @restaurant.address %></p>
 <p><%= @restaurant.phone_number %></p>
 <p><%= @restaurant.category %></p>
-<div>
-  <%= link_to 'Edit', edit_restaurant_path(@restaurant) %> |
-  <%= link_to 'Back', restaurants_path %> |
-  <%= link_to 'Leave a review', new_restaurant_review_path(@restaurant) %>
-</div>
+<p><%= link_to 'Back', restaurants_path %></p>
 <hr>
 <h2>Reviews</h2>
 <ul class="list-unstyled">
+  <%= raw "<em>no reviews yet</em>" if @restaurant.reviews.size.zero? %>
   <% @restaurant.reviews.each do |review| %>
   <li>
     <%= '⭐️'*review.rating %>
@@ -21,3 +18,12 @@
   </li>
   <% end %>
 </ul>
+<div>
+<h2>Add new review for <%= @restaurant.name %></h2>
+<%= simple_form_for [ @restaurant, Review.new ] do |f| %>
+  <%= f.input :rating %>
+  <%= f.input :content %>
+  <%= f.submit class: "btn btn-primary" %>
+<% end %>
+</div>
+
