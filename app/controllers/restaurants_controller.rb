@@ -1,6 +1,4 @@
 class RestaurantsController < ApplicationController
-  before_action :find_restaurant, only: [:show, :edit, :update, :destroy]
-
   def index
     # lists all restaurants
     @restaurants = Restaurant.all
@@ -8,6 +6,7 @@ class RestaurantsController < ApplicationController
 
   def show
     # displays one restaurant
+    @restaurant = Restaurant.find(params[:id])
   end
 
   def new
@@ -18,35 +17,16 @@ class RestaurantsController < ApplicationController
   def create
     # posts new restaurant to db
     @restaurant = Restaurant.new(restaurant_params)
-
-    redirect_to restaurant_path(@restaurant)
-  end
-
-  def edit
-    # for form generation
-  end
-
-  def update
-    # changes the record in db
-    @restaurant = Restaurant.update(restaurant_params)
-
-    redirect_to restaurant_path(@restaurant)
-  end
-
-  def destroy
-    # deletes the record
-    @restaurant.delete
-
-    redirect_to restaurants_path
+    if @restaurant.save
+      redirect_to restaurant_path(@restaurant)
+    else
+      render :new
+    end
   end
 
   private
 
-  def find_restaurant
-    @restaurant = Restaurant.find(params[:id])
-  end
-
   def restaurant_params
-    params.require(:restaurant).permit(:name, :address, :stars)
+    params.require(:restaurant).permit(:name, :category, :address, :phone_number)
   end
 end

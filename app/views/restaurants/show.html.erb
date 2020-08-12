@@ -1,0 +1,23 @@
+<h1><%= @restaurant.name %></h1>
+<p><%= @restaurant.address %></p>
+<p><%= @restaurant.phone_number %></p>
+<p><%= @restaurant.category %></p>
+<div>
+  <%= link_to 'Edit', edit_restaurant_path(@restaurant) %> |
+  <%= link_to 'Back', restaurants_path %> |
+  <%= link_to 'Leave a review', new_restaurant_review_path(@restaurant) %>
+</div>
+<hr>
+<h2>Reviews</h2>
+<ul class="list-unstyled">
+  <% @restaurant.reviews.each do |review| %>
+  <li>
+    <%= '⭐️'*review.rating %>
+    <p><%= review.content %></p>
+    <%= link_to "Remove",
+                  review_path(review),
+                  method: :delete,
+                  data: { confirm: "Are you sure?" } %>
+  </li>
+  <% end %>
+</ul>

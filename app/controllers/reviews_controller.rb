@@ -1,5 +1,5 @@
 class ReviewsController < ApplicationController
-  before_action :find_review, only: [:show, :edit, :update, :destroy]
+  before_action :find_review, only: [:show]
 
   def index
     # lists all reviews
@@ -7,46 +7,38 @@ class ReviewsController < ApplicationController
   end
 
   def show
-    # displays one review
+    @review = Review.find(params[:id])
   end
 
   def new
     # for form generation
+    @restaurant = Restaurant.find(params[:restaurant_id])
     @review = Review.new
   end
 
   def create
     # posts new review to db
     @review = Review.new(review_params)
-
-    redirect_to review_path(@review)
-  end
-
-  def edit
-    # for form generation
-  end
-
-  def update
-    # changes the record in db
-    @review = Review.update(review_params)
-
-    redirect_to review_path(@review)
+    # get `restaurant_id` to associate with review
+    @restaurant = Restaurant.find(params[:restaurant_id])
+    @review.restaurant = @restaurant
+    if @review.save
+      redirect_to restaurant_path(@restaurant)
+    else
+      render :new
+    end
   end
 
   def destroy
     # deletes the record
-    @review.delete
-
-    redirect_to reviews_path
+    @review = Review.find(params[:id])
+    @review.destroy
+    redirect_to restaurant_path(@review.restaurant)
   end
 
   private
 
-  def find_review
-    @review = Review.find(params[:id])
-  end
-
   def review_params
-    params.require(:review).permit(:name, :address, :stars)
+    params.require(:review).permit(:content, :rating)
   end
 end
