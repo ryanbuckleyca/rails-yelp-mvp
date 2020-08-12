@@ -1,20 +1,4 @@
 class ReviewsController < ApplicationController
-  before_action :find_review, only: [:show]
-
-  def index
-    # lists all reviews
-    @reviews = Review.all
-  end
-
-  def show
-    @review = Review.find(params[:id])
-  end
-
-  def new
-    # for form generation
-    @restaurant = Restaurant.find(params[:restaurant_id])
-    @review = Review.new
-  end
 
   def create
     # posts new review to db
